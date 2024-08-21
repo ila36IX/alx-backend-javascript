@@ -6,12 +6,11 @@ async function asyncUploadUser() {
     const user = await createUser();
 
     return { photo, user };
-  }
-  catch (e) {
+  } catch (e) {
     return {
       photo: null,
       user: null,
-    }
+    };
   }
 }
 
