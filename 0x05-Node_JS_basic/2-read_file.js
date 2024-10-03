@@ -9,7 +9,7 @@ function countStudents(path) {
   }
   const lines = csv.split('\n');
   const fields = lines[0].split(',');
-  const plainData = lines.slice(1).filter((r) => r.length);
+  const plainData = lines.slice(1).filter((r) => r.trim().length);
   const data = [];
   for (const line of plainData) {
     const record = {};
