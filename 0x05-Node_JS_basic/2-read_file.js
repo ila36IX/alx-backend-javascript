@@ -15,7 +15,7 @@ function countStudents(path) {
     const record = {};
     const recordFields = line.split(',');
     recordFields.forEach((field, i) => {
-      record[fields[i]] = field;
+      record[fields[i]] = field.trim();
     });
     data.push(record);
   }
