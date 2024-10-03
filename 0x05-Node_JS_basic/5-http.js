@@ -39,18 +39,18 @@ const app = createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
   if (req.url === '/') {
-    res.end('Hello Holberton School!');
+    res.write('Hello Holberton School!');
+    res.end();
   } else if (req.url === '/students' || req.url === '/students/') {
     countStudents(process.argv[2])
-      .then((states) => res.end(states));
+      .then((states) => res.write(states))
+      .then(() => res.end());
   } else {
     res.statusCode = 200;
     res.end('Not found');
   }
 });
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.listen(port);
 
 module.exports = app;
