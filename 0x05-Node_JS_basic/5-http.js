@@ -41,7 +41,7 @@ const app = createServer((req, res) => {
   if (req.url === '/') {
     res.end('Hello Holberton School!');
   } else if (req.url === '/students' || req.url === '/students/') {
-    countStudents('./database.csv')
+    countStudents(process.argv[2])
       .then((states) => res.end(states));
   } else {
     res.statusCode = 200;
