@@ -23,7 +23,7 @@ function parseCSV(csv) {
 }
 async function countStudents(path) {
   const data = await new Promise((resolve, reject) => {
-    readFile(path, { encoding: 'utf8' }, (err, data) => {
+    readFile(path, 'utf-8', (err, data) => {
       if (err) reject(new Error('Cannot load the database'));
       resolve(data);
     });
@@ -53,7 +53,9 @@ async function countStudents(path) {
 //       });
 //       console.log(`Number of students: ${totalStudents}`);
 //       for (const [field, names] of Object.entries(students)) {
-//         console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
+//         console.log(
+//           `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`
+//         );
 //       }
 //       resolve();
 //     });
