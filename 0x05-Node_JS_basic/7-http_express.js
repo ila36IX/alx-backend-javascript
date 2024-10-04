@@ -1,35 +1,35 @@
 const express = require('express');
 const { readFile } = require('fs');
 
-function parseCSV(csv) {
-  const lines = csv.split('\n');
-  const fields = lines[0].split(',');
-  const plainData = lines.slice(1).filter((r) => r.length);
-  const data = [];
-  for (const line of plainData) {
-    const record = {};
-    const recordFields = line.split(',');
-    recordFields.forEach((field, i) => {
-      record[fields[i]] = field;
-    });
-    data.push(record);
-  }
+function countStudents(fileName) {
+  const students = {};
+  let totalStudents = 0;
   let resp = '';
-  resp += `Number of students: ${data.length} \n`;
-  [...new Set(data.map((e) => e.field))].forEach((field) => {
-    const names = data.filter((e) => e.field === field).map((e) => e.firstname);
-    resp += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
-  });
-  return resp;
-}
-async function countStudents(path) {
-  const csv = await new Promise((resolve, reject) => {
-    readFile(path, { encoding: 'utf8' }, (err, data) => {
-      if (err) reject(new Error('Cannot load the database'));
-      resolve(data);
+
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line consistent-return
+    readFile(fileName, 'utf-8', (error, data) => {
+      if (error) {
+        return reject(Error('Cannot load the database'));
+      }
+      const lines = data.trim().split('\n').slice(1);
+      lines.forEach((line) => {
+        const [name, , , field] = line.split(',');
+        if (field) {
+          if (!students[field]) {
+            students[field] = [];
+          }
+          students[field].push(name);
+          totalStudents += 1;
+        }
+      });
+      resp += `Number of students: ${totalStudents}\n`;
+      for (const [field, names] of Object.entries(students)) {
+        resp += `Number of students in ${field}: ${names.length}. List: ${names.join(', ')}\n`;
+      }
+      resolve(resp);
     });
   });
-  return parseCSV(csv);
 }
 
 const app = express();
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 
 app.get('/students', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
-  countStudents('./database.csv')
+  countStudents(process.argv[2])
     .then((data) => req.send(`This is the list of our students\n${data}`))
     .catch((e) => req.send(`This is the list of our students\n${e.message}`));
 });
