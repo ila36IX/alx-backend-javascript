@@ -36,19 +36,15 @@ const app = express();
 const port = 1245;
 
 app.get('/', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
   res.send('Hello Holberton School!');
 });
 
 app.get('/students', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
   countStudents(process.argv[2])
-    .then((data) => req.send(`This is the list of our students\n${data}`))
-    .catch((e) => req.send(`This is the list of our students\n${e.message}`));
+    .then((data) => res.send(`This is the list of our students\n${data}`))
+    .catch((e) => res.send(`This is the list of our students\n${e.message}`));
 });
 
-app.listen(port, () => {
-  console.log(`App is running on port ${port}`);
-});
+app.listen(port, () => { });
 
 module.exports = app;
