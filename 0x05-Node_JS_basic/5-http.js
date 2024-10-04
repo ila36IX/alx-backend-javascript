@@ -45,6 +45,9 @@ const app = createServer((req, res) => {
       .then((states) => {
         res.writeHead(200);
         res.end(`This is the list of our students\n${states}`);
+      }).catch(() => {
+        res.writeHead(404);
+        res.end('Cannot load the database');
       });
   } else {
     res.writeHead(404);
