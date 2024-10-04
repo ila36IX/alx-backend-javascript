@@ -32,7 +32,6 @@ async function countStudents(path) {
   return parseCSV(csv);
 }
 
-const hostname = '127.0.0.1';
 const port = 1245;
 
 const app = createServer((req, res) => {
